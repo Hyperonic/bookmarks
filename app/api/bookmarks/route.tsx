@@ -1,4 +1,5 @@
 import prisma from '@/prisma/client'
+import { auth } from '@clerk/nextjs';
 import { NextRequest, NextResponse } from 'next/server';
 
 // const GET = async(req: any, res: any) => {
@@ -55,7 +56,11 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
+  const { userId } = auth();
   const bookmarks = await prisma.bookmark.findMany({
+    where: {
+      userId: userId as string,
+    },
     include: {
       category: true, // Include all fields from the category model
     },
