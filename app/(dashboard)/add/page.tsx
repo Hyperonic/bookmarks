@@ -100,7 +100,7 @@ const AddPage = () => {
         />
         <TextFieldInput placeholder="Name…" {...register('name')} />
         <TextFieldInput placeholder="Link…" {...register('link')} />
-        <Button type="submit">Add</Button>
+        <Button className="bg-sky-500" type="submit">Add</Button>
     </form>
     )
 }
