@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useEffect, useState } from 'react';
 import { useAuth } from "@clerk/nextjs";
+import axios from 'axios';
 
 type BookmarkFormData = z.infer<typeof bookmarksSchema>;
 
@@ -58,17 +59,11 @@ const AddPage = () => {
     const onSubmit = handleSubmit(async (data) => {
         try {
             console.log(data, userId);
-            const response = await fetch('/api/bookmarks', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Specify the content type as JSON
-                },
-                body: JSON.stringify({
+            const response = await axios.post('/api/bookmarks', {
                     categoryId: data.categoryId,
                     name: data.name,
                     link: data.link,
                     userId,
-                }),
             });
             console.log('resp', response);
         router.push('/list');
