@@ -44,6 +44,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   const data = await request.json()
+  console.log('data', data);
+  try {
   const bookmark = await prisma.bookmark.create({
       data: {
           categoryId: data.categoryId,
@@ -52,7 +54,11 @@ export async function POST(request: NextRequest) {
           userId: data.userId,
       },
   });
+  console.log('post resp', bookmark);
   return NextResponse.json({ data: bookmark })
+} catch (e){
+  console.log('post err', e);
+}
 }
 
 export async function GET(request: NextRequest) {
