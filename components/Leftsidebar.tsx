@@ -19,10 +19,10 @@ interface RecentAdded {
 
 const SideSection = ({recentAdded}: {recentAdded: RecentAdded[]}) => {
   return (
-  <div className='p-3'>
-    <section className="h-full background-light900_dark200 light-border custom-scrollbar sticky left-0 top-0 flex flex-col justify-between overflow-y-auto border-r p-6 shadow-light-300 dark:shadow-none lg:w-[266px]">
-      <div className="flex flex-1 flex-col gap-6">
-        <h2 className="font-bold">Recently Added</h2>
+  <div className='bg-blue p-3 text-white'>
+    <section className="h-full background-light900_dark200 light-border custom-scrollbar sticky left-0 top-0 flex flex-col justify-between overflow-y-auto shadow-light-300 dark:shadow-none lg:w-[266px]">
+      <div className="p-6 flex flex-1 flex-col gap-6">
+        <h2 className="font-bold text-recentAdded">Recently Added</h2>
         <ScrollArea className=''>
           {recentAdded.map(item => {
 
@@ -39,8 +39,8 @@ const SideSection = ({recentAdded}: {recentAdded: RecentAdded[]}) => {
       </div>
 
       <Link href="/add">
-            <button className="small-medium btn-secondary min-h-[41px] w-full rounded-lg px-4 py-1 shadow-none bg-sky-500">
-              <span className="primary-text-gradient text-white text-[24px]">
+            <button className="border small-medium btn-secondary min-h-[41px] w-full px-4 py-1 shadow-none bg-blue">
+              <span className="primary-text-gradient text-recentAdded text-[24px]">
                 +
               </span>
             </button>

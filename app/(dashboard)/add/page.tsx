@@ -73,29 +73,40 @@ const AddPage = () => {
         }
     });
     return (
-    <form onSubmit={onSubmit}>
-        <Controller
-            control={control}
-            name="categoryId"
-            render={({ field: { onChange, value } }) => (
-                <SelectRoot onValueChange={onChange} value={value}>
-                    <SelectTrigger placeholder="Category" />
-                    <SelectContent>
-                        <SelectGroup>
-                        <SelectLabel>Category</SelectLabel>
-                        {categories.map((category: any) => (
-                            <SelectItem key={category.id} value={category.id}>
-                                {category.name}
-                            </SelectItem>
-                        ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </SelectRoot>
-            )}
-        />
-        <TextFieldInput placeholder="Name…" {...register('name')} />
-        <TextFieldInput placeholder="Link…" {...register('link')} />
-        <Button className="bg-sky-500" type="submit">Add</Button>
+    <form onSubmit={onSubmit} className="flex flex-col align-center">
+        <div className="flex items-center mb-4">
+            <label className="mr-2 w-[100px]">Category</label>
+            <div className="w-full">
+            <Controller
+                control={control}
+                name="categoryId"
+                render={({ field: { onChange, value } }) => (
+                    <SelectRoot onValueChange={onChange} value={value}>
+                        <SelectTrigger placeholder="" />
+                        <SelectContent color="gray">
+                            <SelectGroup>
+                            <SelectLabel>Category</SelectLabel>
+                            {categories.map((category: any) => (
+                                <SelectItem key={category.id} value={category.id}>
+                                    {category.name}
+                                </SelectItem>
+                            ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </SelectRoot>
+                )}
+            />
+            </div>
+        </div>
+        <div className="flex items-center mb-4">
+            <label className="mr-2 w-[100px]">Link</label>
+            <input className="h-[32px] w-full border border-greyBorder bg-grey" placeholder="" {...register('link')} />
+        </div>
+        <div className="flex items-center">
+            <label className="mr-2 w-[100px]">Name</label>
+            <input className="h-[32px] w-full border border-greyBorder bg-grey" placeholder="" {...register('name')} />
+        </div>
+        <button className="self-center w-[150px] mt-4 py-2 px-4 drop-shadow-md bg-grey border" type="submit">Done</button>
     </form>
     )
 }

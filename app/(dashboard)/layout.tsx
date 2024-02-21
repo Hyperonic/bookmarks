@@ -6,7 +6,7 @@ import React, { useState } from "react";
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [showSidebar, setShowSidebar] = useState(false);
   return (
-    <main className="flex min-h-screen flex-col background-light850_dark100 relative">
+    <main className="bg-grey flex min-h-screen flex-col background-light850_dark100 relative">
       <Navbar setShowSidebar={setShowSidebar} />
       <div className="flex flex-grow">
         <LeftSidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />

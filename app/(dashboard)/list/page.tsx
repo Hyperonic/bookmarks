@@ -58,9 +58,9 @@ const ListPage = () => {
       <div className="mb-4">
         <input
           type="text"
-          placeholder="Search bookmarks"
+          placeholder="Search"
           onChange={(e) => filterBookmarks(e.target.value)}
-          className="border border-gray-300 rounded-lg px-4 py-2 w-full"
+          className="placeholder:italic bg-grey border border-gray-300 rounded-lg px-4 py-2 w-full"
         />
       </div>
       <div className="grid grid-cols-3 gap-4">

@@ -84,3 +84,8 @@
   background-color: white;
   --scrollbar-size: 10px;
 }
+
+.rt-SelectTrigger {
+  width: 100%;
+  background: none;
+}
