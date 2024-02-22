@@ -42,10 +42,10 @@ const AddPage = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch(`/api/categories`);
-            if (response.ok) {
-            const data = await response.json();
-            setCategories(data);
+            const response = await axios.get(`/api/categories`);
+            if (response) {
+            //const data = await response.json();
+            setCategories(response.data);
           }
         } catch (error) {
           console.error('Error fetching categories:', error);
@@ -85,7 +85,7 @@ const AddPage = () => {
                         <SelectTrigger placeholder="" />
                         <SelectContent color="gray">
                             <SelectGroup>
-                            <SelectLabel>Category</SelectLabel>
+                            {/* <SelectLabel>Category</SelectLabel> */}
                             {categories.map((category: any) => (
                                 <SelectItem key={category.id} value={category.id}>
                                     {category.name}

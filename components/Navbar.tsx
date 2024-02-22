@@ -7,7 +7,7 @@ const Navbar = ({setShowSidebar}: any) => {
     return (
       <div className='border border-greyBorder flex bg-grey p-3 space-x-3 justify-end'>
           {isDesktop ? <div className="mr-auto">
-            <span className="font-bold text-3xl mr-2 align-middle">QIKDAW</span>
+            <span className="font-bold text-3xl mr-2 align-sub">QIKDAW</span>
             <span className="">Quickest Door to your favorite website</span>
           </div> : ''}
           {isDesktop ? '' : <button
