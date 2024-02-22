@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       },
   });
   console.log('post resp', bookmark);
-  return NextResponse.json({ data: bookmark })
+  return Response.json({ data: bookmark })
 } catch (e){
   console.log('post err', e);
 }
@@ -82,5 +82,5 @@ export async function GET(request: NextRequest) {
   //     },
   //   },
   // });
-  return NextResponse.json(bookmarks);
+  return Response.json(bookmarks);
 }
