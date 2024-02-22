@@ -63,10 +63,10 @@ const ListPage = () => {
           className="placeholder:italic bg-grey border border-gray-300 rounded-lg px-4 py-2 w-full"
         />
       </div>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-6 gap-4">
         {filteredBookmarks.map((bookmark: any) => (
-          <div key={bookmark.id} className="bg-gray-200 p-4 rounded-lg">
-            <h2 className="text-lg font-semibold">{bookmark.name}</h2>
+          <div key={bookmark.id} className="bg-[#585858] border p-2 text-center">
+            <h2 className="text-lg text-white font-semibold">{bookmark.name}</h2>
           </div>
         ))}
       </div>
