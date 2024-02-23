@@ -111,8 +111,8 @@ const AddPage = () => {
             <label className="mr-2 w-[100px]">Name</label>
             <input className="h-[32px] w-full border border-greyBorder bg-grey" placeholder="" {...register('name')} />
         </div>
-        <button className="self-center w-[150px] mt-4 py-2 px-4 drop-shadow-md bg-grey border" type="submit">{isSubmitting ? (<ImSpinner2 />)
-: 'Donee'}</button>
+        <button className="self-center w-[150px] mt-4 py-2 px-4 drop-shadow-md bg-grey border" type="submit">{isSubmitting ? (<ImSpinner2 className="m-auto animate-spin" />)
+: 'Done'}</button>
     </form>
     )
 }
