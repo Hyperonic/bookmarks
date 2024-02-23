@@ -112,7 +112,7 @@ const AddPage = () => {
             <input className="h-[32px] w-full border border-greyBorder bg-grey" placeholder="" {...register('name')} />
         </div>
         <button className="self-center w-[150px] mt-4 py-2 px-4 drop-shadow-md bg-grey border" type="submit">{isSubmitting ? (<ImSpinner2 />)
-: 'Done'}</button>
+: 'Donee'}</button>
     </form>
     )
 }
