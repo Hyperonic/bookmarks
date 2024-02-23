@@ -6,17 +6,17 @@ import { NextRequest, NextResponse } from "next/server";
 // See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
 export default authMiddleware({
     publicRoutes: ["/api/webhooks(.*)", "/"],
-    afterAuth: (auth, request) => {
-      const url = request.nextUrl;
-      const headers = new Headers();
-      headers.set('x-pathname', request.nextUrl.pathname);
-      return NextResponse.next({
-        request: {
-            // New request headers
-            headers
-        },
-      });
-    },
+    // afterAuth: (auth, request) => {
+    //   const url = request.nextUrl;
+    //   const headers = new Headers();
+    //   headers.set('x-pathname', request.nextUrl.pathname);
+    //   return NextResponse.next({
+    //     request: {
+    //         // New request headers
+    //         headers
+    //     },
+    //   });
+    // },
     debug: true 
 });
  
