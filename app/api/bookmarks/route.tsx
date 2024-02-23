@@ -43,10 +43,8 @@ import { NextRequest, NextResponse } from 'next/server';
 // export { GET, POST }
 
 export async function POST(request: NextRequest) {
-  console.log('request', request);
-  console.log('requestText', request.text());
-  const dataa = await request.text()
-  const data = JSON.parse(dataa);
+  console.log('request', request.body);
+  const data = await request.json()
   console.log('data', data);
   try {
   const bookmark = await prisma.bookmark.create({
@@ -86,4 +84,12 @@ export async function GET(request: NextRequest) {
   //   },
   // });
   return Response.json(bookmarks);
+}
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '20mb',
+    },
+  },
 }
