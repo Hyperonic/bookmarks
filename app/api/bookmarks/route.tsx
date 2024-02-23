@@ -85,11 +85,3 @@ export async function GET(request: NextRequest) {
   // });
   return Response.json(bookmarks);
 }
-
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '20mb',
-    },
-  },
-}
