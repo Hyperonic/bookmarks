@@ -64,7 +64,7 @@ const AddPage = () => {
                     name: data.name,
                     link: data.link,
                     userId,
-            }, {headers: {'Content-Type': 'application/json'}});
+            });
             console.log('resp', response);
         router.push('/list');
         router.refresh();

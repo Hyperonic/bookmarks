@@ -45,7 +45,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   console.log('request', request.body);
   const datat = await request.text()
-  console.log('req text', datat);
+  console.log('req text', JSON.parse(datat));
   const data = await request.json()
   console.log('data', data);
   try {
