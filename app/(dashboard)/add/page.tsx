@@ -8,6 +8,8 @@ import { z } from 'zod';
 import { useEffect, useState } from 'react';
 import { useAuth } from "@clerk/nextjs";
 import axios from 'axios';
+import { ImSpinner2 } from "react-icons/im";
+
 
 type BookmarkFormData = z.infer<typeof bookmarksSchema>;
 
@@ -29,6 +31,7 @@ const getData = async () => {
 }
 const AddPage = () => {
     const [categories, setCategories] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
     const router = useRouter();
     const {
         register,
@@ -57,6 +60,7 @@ const AddPage = () => {
       }, []);
 
     const onSubmit = handleSubmit(async (data) => {
+        setIsSubmitting(true);
         try {
             console.log(data, userId);
             const response = await axios.post('/api/bookmarks', {
@@ -70,6 +74,7 @@ const AddPage = () => {
         router.refresh();
         } catch (error) {
             console.log(error);
+            setIsSubmitting(false);
         }
     });
     return (
@@ -106,7 +111,8 @@ const AddPage = () => {
             <label className="mr-2 w-[100px]">Name</label>
             <input className="h-[32px] w-full border border-greyBorder bg-grey" placeholder="" {...register('name')} />
         </div>
-        <button className="self-center w-[150px] mt-4 py-2 px-4 drop-shadow-md bg-grey border" type="submit">Done</button>
+        <button className="self-center w-[150px] mt-4 py-2 px-4 drop-shadow-md bg-grey border" type="submit">{isSubmitting ? (<ImSpinner2 />)
+: 'Done'}</button>
     </form>
     )
 }
