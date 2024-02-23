@@ -44,7 +44,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   console.log('request', request.body);
-  const data = await request.json()
+  let passedValue = await new Response(request.body).text();
+  const data = JSON.parse(passedValue);
+  //const data = await request.json()
   console.log('data', data);
   try {
   const bookmark = await prisma.bookmark.create({
