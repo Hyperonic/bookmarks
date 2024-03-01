@@ -1,5 +1,6 @@
 import prisma from '@/prisma/client'
 import { auth } from '@clerk/nextjs';
+import { Prisma } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 // const GET = async(req: any, res: any) => {
@@ -44,15 +45,18 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   console.log('request', request.body);
+  const { userId } = auth();
   const data = await new Response(request.body).json()
-  console.log('data', data);
+  console.log('bookmark post data', data);
   try {
   const bookmark = await prisma.bookmark.create({
       data: {
+          userId: userId as string,
           categoryId: data.categoryId,
           name: data.name,
           link: data.link,
-          userId: data.userId,
+          isAdminAdded: data.isAdminAdded,
+          isSelected: data.isSelected,
       },
   });
   console.log('post resp', bookmark);
@@ -64,13 +68,36 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   const { userId } = auth();
+  const searchParams = request.nextUrl.searchParams;
+  const isAdminAdded = searchParams.get('isAdminAdded');
+  const categoryId = searchParams.get('categoryId');
+  let where: Prisma.BookmarkWhereInput  = {};
+  if (isAdminAdded) {
+    where = {
+      isAdminAdded: true,
+    };
+  } else {
+    where = {
+      OR: [
+        { userId: userId as string }, // Filter by userId
+        { isAdminAdded: true },   // Filter by isAdminAdded: true
+      ]
+    };
+  }
+  if (categoryId) {
+    where = {
+      ...where,
+      categoryId,
+    };
+  }
   const bookmarks = await prisma.bookmark.findMany({
-    where: {
-      userId: userId as string,
+    where,
+    orderBy: {
+      createdAt: 'desc'
     },
-    include: {
-      category: true, // Include all fields from the category model
-    },
+    // include: {
+    //   category: true, // Include all fields from the category model
+    // },
 });
   // const categoryIds = [...new Set(bookmarks.map(bookmark => bookmark.categoryId))];
   // const categoriesData = await prisma.category.findMany({

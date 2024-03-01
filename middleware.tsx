@@ -17,7 +17,7 @@ export default authMiddleware({
     //     },
     //   });
     // },
-    debug: true 
+    debug: false 
 });
  
 export const config = {

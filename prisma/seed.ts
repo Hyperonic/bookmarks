@@ -1,14 +1,14 @@
-import { CategoryType, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 async function main() {
     
-    const categories = [
-      { name: 'Social', type: CategoryType.Social },
+    const categories: any = [
+      /* { name: 'Social', type: CategoryType.Social },
       { name: 'Entertainment', type: CategoryType.Entertainment },
       { name: 'Technology', type: CategoryType.Technology },
-      { name: 'Finance', type: CategoryType.Finance },
+      { name: 'Finance', type: CategoryType.Finance }, */
     ];
 
       for (const category of categories) {

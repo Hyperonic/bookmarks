@@ -1,5 +1,9 @@
 "use client"; 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { SelectedCategoryContext } from '../layout';
+import { useQueryClient } from '@tanstack/react-query';
+import { useBookmarks } from '@/hooks/useBookmarks';
+import { Bookmark, Category } from '@/hooks/useCategories';
 
 
 const getData = async () => {
@@ -21,41 +25,53 @@ const getData = async () => {
 
 const ListPage = () => {
   //const { analyses, average } = await getData()
-  const [bookmarks, setBookmarks]: any = useState([]);
+  //const [bookmarks, setBookmarks]: any = useState([]);
   const [filteredBookmarks, setFilteredBookmarks]: any = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    const fetchData = async () => {
-        try {
-            const response = await fetch(`/api/bookmarks`);
-            if (response.ok) {
-            const data = await response.json();
-            setBookmarks(data);
-            setFilteredBookmarks(data);
-            } else {
-            console.error('Error fetching data:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
+  const selectedCategory = useContext(SelectedCategoryContext) as Category | null;
 
-    fetchData();
-  }, []);
+  const queryClient = useQueryClient();
+
+  const { data: bookmarks, isFetching: isFetchingBookmarks } = useBookmarks(false, selectedCategory ? selectedCategory.id : undefined)
+
+  useEffect(() => {
+    setFilteredBookmarks(bookmarks.filter(bookmark => bookmark.isSelected));
+  }, [bookmarks])
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //       try {
+  //           const response = await fetch(`/api/bookmarks`);
+  //           if (response.ok) {
+  //           const data = await response.json();
+  //           setBookmarks(data);
+  //           console.log('filteredBookmarks',);
+  //           setFilteredBookmarks(data);
+  //           } else {
+  //           console.error('Error fetching data:', response.statusText);
+  //           }
+  //       } catch (error) {
+  //           console.error('Error fetching data:', error);
+  //       }
+  //   };
+
+  //   fetchData();
+  // }, []);
   const filterBookmarks = (searchTerm: string) => {
-    let filteredBookmarks = bookmarks;
+    const selectedBookmarks = bookmarks.filter(bookmark => bookmark.isSelected);
+    let filteredBookmarks = selectedBookmarks;
     if (searchTerm.trim()) {
-      filteredBookmarks = bookmarks.filter((bookmark: any) =>
+      filteredBookmarks = selectedBookmarks.filter((bookmark: any) =>
         bookmark.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        bookmark.category.name.toLowerCase().includes(searchTerm.toLowerCase())
+        bookmark.link.toLowerCase().includes(searchTerm.toLowerCase()) //||
+        //bookmark.category.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
     setFilteredBookmarks(filteredBookmarks);
   };
   return (
     <div>
-      <div className="mb-4">
+      <div className="my-4">
         <input
           type="text"
           placeholder="Search"
@@ -66,7 +82,10 @@ const ListPage = () => {
       <div className="grid grid-cols-6 gap-4">
         {filteredBookmarks.map((bookmark: any) => (
           <div key={bookmark.id} className="bg-[#585858] border p-2 text-center">
-            <h2 className="text-lg text-white font-semibold">{bookmark.name}</h2>
+            <a href={bookmark.link} target="_blank" rel="noopener noreferrer" className="text-lg text-white font-semibold">
+            {bookmark.name}
+            </a>
+            {/* <h2 className="text-lg text-white font-semibold">{bookmark.name}</h2> */}
           </div>
         ))}
       </div>
