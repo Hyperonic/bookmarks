@@ -82,7 +82,7 @@ export async function POST(req: Request) {
       });
 
       const data = {
-        clerkId: evt.data.id,
+        //clerkId: evt.data.id,
         firstName: evt.data.first_name,
         lastName: evt.data.last_name,
         email,

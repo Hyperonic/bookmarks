@@ -26,6 +26,9 @@ model User {
   avatarImage     String?  @default("")
   categories  Category[]
   bookmark   Bookmark[]
+  selectedBookmarks   String[]  // Array of ObjectIds referencing selected bookmarks
+  unselectedBookmarks String[]
+  hiddenCategories    String[]  // Array of ObjectIds referencing hidden categories
 }
 
 model Bookmark {
