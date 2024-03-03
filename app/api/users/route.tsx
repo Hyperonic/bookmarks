@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 
   const categories = await prisma.user.findUnique({
     where: {
-      id: userId as string
+      clerkId: userId as string
     },
     select: {
       unselectedBookmarks: true,
@@ -30,7 +30,7 @@ export async function PUT(request: NextRequest) {
     try {
       const updatedCategory = await prisma.user.update({
         where: {
-            id: userId as string,
+          clerkId: userId as string,
         },
         data: {
           unselectedBookmarks,
