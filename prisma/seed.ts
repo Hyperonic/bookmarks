@@ -16,7 +16,7 @@ async function main() {
           data: category,
         });
         console.log('createdCategory', createdCategory);
-        const user = await prisma.user.upsert({
+        /* const user = await prisma.user.upsert({
             where: { email: 'aziz.zee@gmail.com' },
             update: {},
             create: {
@@ -34,7 +34,7 @@ async function main() {
             include: {
                 bookmark: true,
             },
-        })
+        }) */
         console.log({ user, })
     }
 }
