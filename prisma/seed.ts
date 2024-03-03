@@ -34,8 +34,8 @@ async function main() {
             include: {
                 bookmark: true,
             },
-        }) */
-        console.log({ user, })
+        })
+        console.log({ user, }) */
     }
 }
 main()
