@@ -11,8 +11,10 @@ import axios from 'axios';
 import { ImSpinner2 } from "react-icons/im";
 import classNames from 'classnames';
 import { Category, useAddCategory, useCategories } from '@/hooks/useCategories';
-import { useAddBookmark, useBookmarks, useUpdateBookmark } from '@/hooks/useBookmarks';
+import { useAddBookmark, useBookmarks, useSelectedBookmarks, useUpdateBookmark, useUpdateBookmarkSelection } from '@/hooks/useBookmarks';
 import { DevTool } from "@hookform/devtools";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 
@@ -47,6 +49,7 @@ const AddPage = () => {
         register,
         control,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm<BookmarkFormData>({
         resolver: zodResolver(bookmarksSchema),
@@ -93,6 +96,15 @@ const AddPage = () => {
               isAdminAdded: false,
               isSelected: true
           });
+          if (hiddenCategories.includes(categoryId as string)) {
+            const updatedHiddenCategories = hiddenCategories.filter((id) => id !== (categoryId as string));
+            setHiddenCategories(updatedHiddenCategories);
+            const userDataPayload = { hiddenCategories: updatedHiddenCategories, selectedBookmarks, unselectedBookmarks };
+            await updateUser(userDataPayload);
+          }
+          showToastMessage();
+          reset();
+          setInput('');
         //router.push('/list');
         //router.refresh();
         } catch (error) {
@@ -106,6 +118,10 @@ const AddPage = () => {
   const [filteredCategories, setFiltered] = useState<Category[]>([]);
   const [isShow, setIsShow] = useState(false);
   const [input, setInput] = useState("");
+
+  const [hiddenCategories, setHiddenCategories] = useState<string[]>([]);
+  const [unselectedBookmarks, setUnselectedBookmarks] = useState<string[]>([]);
+  const [selectedBookmarks, setSelectedBookmarks] = useState<string[]>([]);
   
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.currentTarget.value;
@@ -144,42 +160,87 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
   const { data: categoriesData, isFetching: isFetchingCategories } = useCategories(false);
   const { data: bookmarksData, isFetching: isFetchingBookmarks } = useBookmarks(false);
+  const { data: userData, isFetching: isFetchingSelectedBookmarks } = useSelectedBookmarks();
+
   useEffect(() => {
-        if (!isFetchingCategories && !isFetchingBookmarks) {
-            const categ: any = categoriesData.map((category: Category) => {
-              return {...category, bookmarks: bookmarksData.filter((bookmark: any) => bookmark.categoryId === category.id)};
+        if (!isFetchingCategories && !isFetchingBookmarks && !isFetchingSelectedBookmarks) {
+            const categ: any = categoriesData?.map((category: Category) => {
+              return {...category, bookmarks: bookmarksData.filter((bookmark: any) => bookmark.categoryId === category.id)
+                // .map((bookmark: any) => ({
+                //     ...bookmark,
+                //     isSelected: bookmark.isSelected ? !userData.unselectedBookmarks.includes(bookmark.id) && !userData.hiddenCategories.includes(bookmark.categoryId) : false,
+                // }))
+              };
           })
             setCategories(categ);
         }
-    }, [categoriesData, isFetchingCategories, bookmarksData, isFetchingBookmarks]);
+    }, [categoriesData, isFetchingCategories, bookmarksData, isFetchingBookmarks, userData, isFetchingSelectedBookmarks]);
     const { mutateAsync: addCategory, isPending: isAddingCategory, isError: addingCategoryError, error: addingCategoryErrorMsg } = useAddCategory();
     const { mutateAsync: addBookmark, isPending: isAddingBookmark,  } = useAddBookmark();
     const { mutateAsync: updateBookmark, isPending: isUpdatingBookmark, } = useUpdateBookmark();
+    const { mutateAsync: updateUser, isPending: isUpdatingUser, } = useUpdateBookmarkSelection();
     const [prevSelection, setPrevSelection] = useState<{ [key: string]: any }>({});
     const doneSuggestion = async () => {
       try {
-        const updatedBookmarks = categories
-          .flatMap(category => category.bookmarks)
-          .filter(bookmark => bookmark.isSelected && bookmark.isSelected !== prevSelection[bookmark.id]);
-
-        // Perform mutation to update bookmarks with changed isSelected property
-        //await mutationFn(updatedBookmarks);
+        const userDataPayload = { hiddenCategories, selectedBookmarks, unselectedBookmarks };
+        await updateUser(userDataPayload);
+        showToastMessage();
       } catch (error) {
           console.error('Error updating bookmark:', error);
       }
     }
 
 // Function to toggle the isSelected property of a bookmark
-const toggleBookmarkSelection = (bookmark: any) => {
-  bookmark.isSelected = !bookmark.isSelected;
-  setPrevSelection(prevState => ({
-    ...prevState,
-    [bookmark.id]: bookmark.isSelected,
-  }));
-};
+    const toggleBookmarkSelection = (bookmark: any) => {
+      if (selectedBookmarks.includes(bookmark.id)) {
+        setSelectedBookmarks(prevItems => prevItems.filter(itemId => itemId !== bookmark.id));
+        setUnselectedBookmarks(prevItems => [...prevItems, bookmark.id]);
+      } else if (unselectedBookmarks.includes(bookmark.id)) {
+        setUnselectedBookmarks(prevItems => prevItems.filter(itemId => itemId !== bookmark.id));
+        setSelectedBookmarks(prevItems => [...prevItems, bookmark.id]);
+      } else if (bookmark.isSelected) {
+        setUnselectedBookmarks(prevItems => [...prevItems, bookmark.id]);
+      } else {
+        setSelectedBookmarks(prevItems => [...prevItems, bookmark.id]);
+      }
+      // if (selectedBookmarks.includes(bookmark.id) || bookmark.isSelected) {
+      //   setSelectedBookmarks(prevItems => prevItems.filter(itemId => itemId !== bookmark.id));
+      //   setUnselectedBookmarks(prevItems => [...prevItems, bookmark.id]);
+      // } else if (unselectedBookmarks.includes(bookmark.id) || !bookmark.isSelected) {
+      //   setUnselectedBookmarks(prevItems => prevItems.filter(itemId => itemId !== bookmark.id));
+      //   setSelectedBookmarks(prevItems => [...prevItems, bookmark.id]);
+      // }
+    };
+
+    useEffect(() => {
+      if (!categories) return;
+      const newHiddenCategories = categories.filter((category) => {
+        // Check if any bookmark in the category is selected or unselected
+        return !category.bookmarks.some((bookmark) => {
+          return selectedBookmarks.includes(bookmark.id) || (bookmark.isSelected && !unselectedBookmarks.includes(bookmark.id));
+        });
+      }).map(category => category.id);
+      setHiddenCategories(newHiddenCategories);
+    }, [selectedBookmarks, unselectedBookmarks, categories]);
+    useEffect(() => {
+      if (!userData) return;
+      const { hiddenCategories, selectedBookmarks, unselectedBookmarks } = userData;
+      setHiddenCategories(hiddenCategories)
+      setSelectedBookmarks(selectedBookmarks)
+      setUnselectedBookmarks(unselectedBookmarks)
+    }, [userData]);
+    const isSelected = (bookmark: any) => {
+      return selectedBookmarks.includes(bookmark.id) || (bookmark.isSelected && !unselectedBookmarks.includes(bookmark.id));
+    }
+    const showToastMessage = () => {
+      toast.success("Done!", {
+        position: "top-center"
+      });
+    };
     return (
       <div className="mt-4 flex flex-col align-center">
-      <h4>Create Category</h4>
+        <ToastContainer autoClose={3000} />
+      <h4 className="self-center">Create Category</h4>
     <form onSubmit={onSubmit} className="mt-4 flex flex-col align-center">
         <div className="flex items-center mb-4">
         <label className="mr-2 w-[100px]">Category</label>
@@ -217,7 +278,7 @@ const toggleBookmarkSelection = (bookmark: any) => {
                                     key={index}
                                     tabIndex={index + 1}
                                     onClick={onClick}
-                                    className={classNames("border-b border-b-base-content/10 w-full", {'bg-grey': index === active})}
+                                    className={classNames(" w-full", {'bg-grey': index === active})}
                                 >
                                     <button>{item.name}</button>
                                 </li>
@@ -244,14 +305,15 @@ const toggleBookmarkSelection = (bookmark: any) => {
 : 'Done'}</button>
     <DevTool control={control} />
     </form>
-    {categories.length ? (
-    <div>
-      <h4>Or select from suggestions below</h4>
-      {categories.map((category, categoryIndex) => (
+    {categories?.length ? (
+    <div className="mt-4 flex flex-col">
+      <h4 className="self-center">Or select from suggestions below</h4>
+      {categories?.map((category, categoryIndex) => (
           <div key={categoryIndex} className="border-gray-300 rounded">
-            <div className="grid grid-cols-6 gap-4">
-              {category.bookmarks.map((bookmark: any) => (
-                <div onClick={() => toggleBookmarkSelection(bookmark)} key={bookmark.id} className={classNames('cursor-pointer border-gray-300 rounded-lg border p-2 text-center', {'bg-green': bookmark.isSelected})}>
+            <h4 className="my-2">{category.name}</h4>
+            <div className="grid grid-cols-6 gap-4 mb-2">
+              {category.bookmarks.filter(bookmark => bookmark.isAdminAdded).map((bookmark: any) => (
+                <div onClick={() => toggleBookmarkSelection(bookmark)} key={bookmark.id} className={classNames('cursor-pointer border-gray-300 rounded-lg border p-2 text-center', {'bg-[#8FE09D]': isSelected(bookmark)})}>
                   {bookmark.name}
                 </div>
               ))}

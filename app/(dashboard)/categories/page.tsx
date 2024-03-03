@@ -338,10 +338,10 @@ const CategoriesPage = () => {
     //queryClient.setQueryData(['categories'], updatedCategories);
   };
 
-  const handleBookmarkSelectChange = (categoryIndex: number, bookmarkIndex: number, isSeleced: boolean) => {
+  const handleBookmarkSelectChange = (categoryIndex: number, bookmarkIndex: number, isSelected: boolean) => {
     //const categories: any = queryClient.getQueryData(['categories']);
     const updatedCategories = [...categories];
-    updatedCategories[categoryIndex].editedBookmarkSelected = isSeleced;
+    updatedCategories[categoryIndex].editedBookmarkSelected = isSelected;
     setCategories(updatedCategories);
     //queryClient.setQueryData(['categories'], updatedCategories);
   };

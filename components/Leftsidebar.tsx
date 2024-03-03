@@ -9,7 +9,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { useSession, useOrganizationList } from '@clerk/nextjs';
 import { Category, useCategories } from "@/hooks/useCategories";
 import { useQueryClient } from "@tanstack/react-query";
-import { useBookmarks } from "@/hooks/useBookmarks";
+import { useBookmarks, useSelectedBookmarks } from "@/hooks/useBookmarks";
 import classnames from "classnames";
 
 
@@ -101,16 +101,22 @@ const LeftSidebar = ({showSidebar, setShowSidebar, onSelectCategory}: {showSideb
 
   const { data: categoriesData, isFetching: isFetchingCategories } = useCategories();
   const { data: bookmarksData, isFetching: isFetchingBookmarks } = useBookmarks();
+  const { data: userData, isFetching: isFetchingSelectedBookmarks } = useSelectedBookmarks();
 
   const [categories, setCategories] = useState<Category[]>([]);
 
 
   useEffect(() => {
-    if (!isFetchingCategories && !isFetchingBookmarks) {
-      const filteredCategories = categoriesData.filter(category => bookmarksData.some(bookmark => bookmark.categoryId === category.id && bookmark.isSelected))
+    if (!isFetchingCategories && !isFetchingBookmarks && !isFetchingSelectedBookmarks && userData) {
+      const filteredCategories = categoriesData.filter(category => {
+        if(userData.hiddenCategories.includes(category.id)) {
+          return false;
+        }
+        return bookmarksData.some(bookmark => bookmark.categoryId === category.id && (userData.selectedBookmarks.includes(bookmark.id) || bookmark.isSelected))
+      })
       setCategories(filteredCategories);
     }
-  }, [categoriesData, bookmarksData, isFetchingCategories, isFetchingBookmarks]);
+  }, [categoriesData, bookmarksData, isFetchingCategories, isFetchingBookmarks, userData, isFetchingSelectedBookmarks]);
 
   //const [bookmarks, setBookmarks]: any = useState([]);
 

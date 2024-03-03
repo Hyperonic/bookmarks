@@ -18,6 +18,17 @@ export function useBookmarks(isAdminAdded = false, categoryId?: string) {
   });
 }
 
+export function useSelectedBookmarks() {
+  return useQuery<any>({
+    queryKey: ['users'],
+    queryFn: async () => {
+      const res = await fetch('/api/users');
+      return res.json();
+    },
+    initialData: {}, 
+  });
+}
+
 export function useAddBookmark() {
   const queryClient = useQueryClient();
   return useMutation<any, Error, { categoryId: string; name: string; link: string, isAdminAdded: boolean, isSelected: boolean }>({
@@ -81,6 +92,23 @@ export function useDeleteBookmark() {
       },
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: ['bookmarks']});
+    },
+  });
+}
+
+export function useUpdateBookmarkSelection() {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, { selectedBookmarks: string[], unselectedBookmarks: string[], hiddenCategories: string[] }>({
+      mutationFn: async ({ selectedBookmarks, unselectedBookmarks, hiddenCategories }) => {
+      const res = await fetch(`/api/users`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ selectedBookmarks, unselectedBookmarks, hiddenCategories }),
+      });
+      return res.json();
+      },
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ['users'], refetchType: 'all'});
     },
   });
 }

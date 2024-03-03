@@ -24,7 +24,7 @@ export default function Home() {
       </Link> */}
      <SignInButton>
         <button className="bg-sky-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-sky-700 focus:outline-none border border-sky-400">
-          <FcGoogle className="inline" /> Login with Google
+          <FcGoogle className="inline" /> Login with Google or Email
         </button>
       </SignInButton>
       {/* <SignOutButton>
