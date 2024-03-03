@@ -217,7 +217,7 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       const newHiddenCategories = categories.filter((category) => {
         // Check if any bookmark in the category is selected or unselected
         return !category.bookmarks.some((bookmark) => {
-          return selectedBookmarks.includes(bookmark.id) || (bookmark.isSelected && !unselectedBookmarks.includes(bookmark.id));
+          return selectedBookmarks?.includes(bookmark.id) || (bookmark.isSelected && !unselectedBookmarks?.includes(bookmark.id));
         });
       }).map(category => category.id);
       setHiddenCategories(newHiddenCategories);
