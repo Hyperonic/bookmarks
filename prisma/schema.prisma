@@ -38,7 +38,7 @@ model Bookmark {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   userId           String
-  user             User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user             User @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
   category         Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId       String
   isAdminAdded     Boolean   @default(false)
@@ -49,7 +49,7 @@ model Bookmark {
 model Category {
   id            String   @id @default(uuid()) @map("_id")
   name          String
-  createdBy     User      @relation(fields: [createdById], references: [id])
+  createdBy     User      @relation(fields: [createdById], references: [clerkId])
   createdById   String
   createdAt     DateTime  @default(now())
   updatedAt       DateTime @updatedAt
