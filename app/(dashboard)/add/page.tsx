@@ -230,7 +230,7 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       setUnselectedBookmarks(unselectedBookmarks)
     }, [userData]);
     const isSelected = (bookmark: any) => {
-      return selectedBookmarks?.includes(bookmark.id) || (bookmark.isSelected && !unselectedBookmarks.includes(bookmark.id));
+      return selectedBookmarks?.includes(bookmark.id) || (bookmark.isSelected && !unselectedBookmarks?.includes(bookmark.id));
     }
     const showToastMessage = () => {
       toast.success("Done!", {
