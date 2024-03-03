@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const isAdminAdded = searchParams.get('isAdminAdded');
   console.log('isAdminAdded', isAdminAdded, request.nextUrl);
+  console.log('userId', userId);
 
   const categories = await prisma.user.findUnique({
     where: {
