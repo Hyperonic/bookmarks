@@ -5,6 +5,7 @@ import { Container, Theme, } from "@radix-ui/themes";
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
 import "./theme-config.css";
+import ReactQueryClientProvider from "@/components/ReactQueryClientProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,9 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
           <Theme>
-            {children}
+            <ReactQueryClientProvider>
+              {children}
+            </ReactQueryClientProvider>
           </Theme>
         </body>
       </html>

@@ -2,8 +2,6 @@
 import LeftSidebar from "@/components/Leftsidebar";
 import Navbar from "@/components/Navbar";
 import React, { createContext, useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useRouter } from "next/navigation";
 
 export const SelectedCategoryContext = createContext(null);
@@ -16,9 +14,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     setSelectedCategory(category);
     router.push('/list');
   };
-  const queryClient = new QueryClient();
   return (
-    <QueryClientProvider client={queryClient}>
       <SelectedCategoryContext.Provider value={selectedCategory}>
         <main className="bg-grey flex min-h-screen flex-col background-light850_dark100 relative">
           <Navbar setShowSidebar={setShowSidebar} />
@@ -30,8 +26,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </main>
       </SelectedCategoryContext.Provider>
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-    </QueryClientProvider>
   );
 };
 
