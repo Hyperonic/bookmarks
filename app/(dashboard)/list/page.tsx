@@ -32,8 +32,6 @@ const ListPage = () => {
 
   const selectedCategory = useContext(SelectedCategoryContext) as Category | null;
 
-  const queryClient = useQueryClient();
-
   const { data: bookmarks, isFetching: isFetchingBookmarks } = useBookmarks(false, selectedCategory ? selectedCategory.id : undefined)
 
   const { data: userData, isFetching: isFetchingSelectedBookmarks } = useSelectedBookmarks();

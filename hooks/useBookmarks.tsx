@@ -2,7 +2,7 @@ import { useMutation, useQuery, QueryClient, useQueryClient } from '@tanstack/re
 
 export function useBookmarks(isAdminAdded = false, categoryId?: string) {
   return useQuery<any[]>({
-    queryKey: ['bookmarks'],
+    queryKey: ['bookmarks', ...(categoryId ? [categoryId] : [])],
     queryFn: async () => {
       let url = '/api/bookmarks';
       if (isAdminAdded) {

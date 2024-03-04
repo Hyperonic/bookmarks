@@ -97,8 +97,6 @@ const LeftSidebar = ({showSidebar, setShowSidebar, onSelectCategory}: {showSideb
   //   }
   // }
 
-  const queryClient = useQueryClient();
-
   const { data: categoriesData, isFetching: isFetchingCategories } = useCategories();
   const { data: bookmarksData, isFetching: isFetchingBookmarks } = useBookmarks();
   const { data: userData, isFetching: isFetchingSelectedBookmarks } = useSelectedBookmarks();
