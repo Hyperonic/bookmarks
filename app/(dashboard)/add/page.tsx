@@ -306,7 +306,7 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     <DevTool control={control} />
     </form>
     {categories?.length ? (
-    <div className="mt-4 flex flex-col">
+    <div className="mt-5 flex flex-col">
       <h4 className="self-center">Or select from suggestions below</h4>
       {categories?.map((category, categoryIndex) => (
           <div key={categoryIndex} className="border-gray-300 rounded">
