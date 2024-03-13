@@ -107,7 +107,7 @@ const ListPage = () => {
   }
   return (
     <div>
-      <div className="my-4">
+      <div className="mx-auto w-full max-w-2xl my-4">
         <input
           type="text"
           placeholder="Search"
@@ -115,9 +115,9 @@ const ListPage = () => {
           className="placeholder:italic bg-grey border border-gray-300 rounded-lg px-4 py-2 w-full"
         />
       </div>
-      <div className="grid grid-cols-6 gap-4">
+      <div className="flex flex-wrap gap-4">
         {filteredBookmarks.map((bookmark: any) => (
-          <div key={bookmark.id} className="relative bg-[#585858] border p-2 text-center group"
+          <div key={bookmark.id} className="relative bg-[#585858] border p-2 text-center group max-w-40 flex-grow"
           >
               <div className="absolute top-0 right-0 -mt-1 -mr-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <button

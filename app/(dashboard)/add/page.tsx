@@ -241,7 +241,7 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       <div className="mt-4 flex flex-col align-center">
         <ToastContainer autoClose={3000} />
       <h4 className="self-center">Create Category</h4>
-    <form onSubmit={onSubmit} className="mt-4 flex flex-col align-center">
+    <form onSubmit={onSubmit} className="mx-auto w-full max-w-2xl mt-4 flex flex-col align-center">
         <div className="flex items-center mb-4">
         <label className="mr-2 w-[100px]">Category</label>
         <div

@@ -34,7 +34,7 @@ const SideSection = ({recentAdded, isAdmin, handleCategoryClick, selectedCategor
               <Link href="/categories">Manage Categories</Link>
             </button>) : ''
         }
-        <h2 className="font-bold text-recentAdded">Recently Added</h2>
+        <h2 className="font-bold text-recentAdded"><Link href="/list">Recently Added</Link></h2>
         <ScrollArea className=''>
           {recentAdded.map(item => {
 
